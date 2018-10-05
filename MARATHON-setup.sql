@@ -1,14 +1,14 @@
 CREATE TABLE Marathon (
-   Place int,
+   Place int PRIMARY KEY,
    Times Time,
    Pace Time,
    GroupPlace int,
-   Group CHAR(6),
+   Groups char(6),
    Age int,
-   Sex Char(1),
+   Sex char(1),
    BIBNumber int,
-   FirstName CHAR(30),
-   LastName CHAR(30),
-   Town CHAR(40),
-   State CHAR(2)
+   FirstName char(30),
+   LastName char(30),
+   Town char(40),
+   State char(2)
 )

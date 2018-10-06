@@ -1,0 +1,1 @@
+DROP TABLE Campuses, DisEnrollments, degrees, disciplines, enrollments, faculty, fees;

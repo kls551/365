@@ -7,13 +7,15 @@ CREATE TABLE CarData (
    Weight int,
    Accelerate decimal(3,1),
    Year int
-)
+);
+
 CREATE TABLE CarMakers (
    ID int PRIMARY KEY,
    Maker char(30) REFERENCES ModelList(Maker),
    FullName char(30),
    Country int
-)
+);
+
 CREATE TABLE CarNames(
    ID int PRIMARY KEY,
    Model Char(40) REFERENCES ModelList(Model),
@@ -23,14 +25,16 @@ CREATE TABLE CarNames(
 CREATE TABLE Continents (
    ContID int PRIMARY KEY,
    Continent char(10) UNIQUE
-)
+);
+
 CREATE TABLE Countries (
    CountryID int PRIMARY KEY,
    CountryName char(20),
    Continent char(10) REFERENCES Continents(Continent)
-)
+);
+
 CREATE TABLE ModelList (
    ModelID int PRIMARY KEY,
-   Maker char(30) UNIQUE,
+   Maker char(30),
    Model char(30) UNIQUE
-)
+);

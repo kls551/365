@@ -1,3 +1,8 @@
+--Kyaw Lwin Soe
+--ksoe@calpoly.edu
+--Kaitlin Bleich
+--kbleich@calpoly.edu
+
 Insert Into CarNames
    VALUES(1,'chevrolet','chevrolet chevelle malibu');
 Insert Into CarNames

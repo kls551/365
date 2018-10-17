@@ -1,3 +1,8 @@
+--Kyaw Lwin Soe
+--ksoe@calpoly.edu
+--Kaitlin Bleich
+--kbleich@calpoly.edu
+
 INSERT INTO Continents
    VALUES(1,'america');
 INSERT INTO Continents

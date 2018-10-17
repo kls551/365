@@ -1,3 +1,8 @@
+--Kyaw Lwin Soe
+--ksoe@calpoly.edu
+--Kaitlin Bleich
+--kbleich@calpoly.edu
+
 INSERT INTO CarMakers
    VALUES(1,'amc','American Motor Company',1);
 INSERT INTO CarMakers

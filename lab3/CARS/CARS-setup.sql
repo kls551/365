@@ -1,3 +1,8 @@
+--Kyaw Lwin Soe
+--ksoe@calpoly.edu
+--Kaitlin Bleich
+--kbleich@calpoly.edu
+
 CREATE TABLE CarData (
    ID int PRIMARY KEY REFERENCES CarNames(ID),
    MPG int,

@@ -1,3 +1,8 @@
+--Kyaw Lwin Soe
+--ksoe@calpoly.edu
+--Kaitlin Bleich
+--kbleich@calpoly.edu
+
 INSERT INTO Countries
    VALUES(1,'usa',1);
 INSERT INTO Countries

@@ -1,3 +1,8 @@
+--Kyaw Lwin Soe
+--ksoe@calpoly.edu
+--Kaitlin Bleich
+--kbleich@calpoly.edu
+
 DELETE FROM CarData  
 WHERE (
    (CarData.Year NOT IN (1979, 1980) OR CarData.MPG < 20) AND

@@ -1,3 +1,8 @@
+--Kyaw Lwin Soe
+--ksoe@calpoly.edu
+--Kaitlin Bleich
+--kbleich@calpoly.edu
+
 INSERT INTO CarData
    VALUES(1,18,8,307,130,3504,12,1970);
 INSERT INTO CarData

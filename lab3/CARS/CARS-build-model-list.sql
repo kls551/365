@@ -1,3 +1,8 @@
+--Kyaw Lwin Soe
+--ksoe@calpoly.edu
+--Kaitlin Bleich
+--kbleich@calpoly.edu
+
 INSERT INTO ModelList
    VALUES (1,1,'amc');
 INSERT INTO ModelList

@@ -1,3 +1,8 @@
+--Kyaw Lwin Soe
+--ksoe@calpoly.edu
+--Kaitlin Bleich
+--kbleich@calpoly.edu
+
 INSERT INTO teachers
    VALUES('MACROSTIE', 'MIN', 101);
 INSERT INTO teachers

@@ -1,3 +1,8 @@
+--Kyaw Lwin Soe
+--ksoe@calpoly.edu
+--Kaitlin Bleich
+--kbleich@calpoly.edu
+
 INSERT INTO students
    VALUES('CAR', 'MAUDE', 2, 101);
 INSERT INTO students

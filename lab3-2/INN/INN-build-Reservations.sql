@@ -1,3 +1,8 @@
+-- Kyaw Lwin Soe
+-- ksoe@calpoly.edu
+-- Kaitlin Bleich
+-- kbleich@calpoly.edu
+
 INSERT INTO Reservations
    VALUES(47496,'RND','01-JAN-10','06-JAN-10',150.00,'KLEVER','ERASMO',1,0);
 INSERT INTO Reservations

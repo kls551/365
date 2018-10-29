@@ -1,3 +1,8 @@
+-- Kyaw Lwin Soe
+-- ksoe@calpoly.edu
+-- Kaitlin Bleich
+-- kbleich@calpoly.edu
+
 INSERT INTO Rooms
    VALUES('RND','Recluse and defiance',1,'King',2,150,'modern');
 INSERT INTO Rooms

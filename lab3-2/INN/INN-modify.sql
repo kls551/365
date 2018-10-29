@@ -1,7 +1,7 @@
---Kyaw Lwin Soe
---ksoe@calpoly.edu
---Kaitlin Bleich
---kbleich@calpoly.edu
+-- Kyaw Lwin Soe
+-- ksoe@calpoly.edu
+-- Kaitlin Bleich
+-- kbleich@calpoly.edu
 
 /*
 • Add to the table which stores information about the rooms an attribute to store the description

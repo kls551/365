@@ -1,3 +1,6 @@
+-- Kaitlin Bleich kbleich
+-- Kyaw Soe ksoe
+
 -- 1
 -- find all Renaults in the database
 SELECT

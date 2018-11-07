@@ -1,3 +1,6 @@
+-- Kaitlin Bleich kbleich
+-- Kyaw Soe ksoe
+
 -- 1
 -- report all campuses from 'Los Angeles'
 SELECT

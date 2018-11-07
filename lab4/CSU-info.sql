@@ -12,7 +12,6 @@ WHERE
 -- report students who graduated from 'California Maritime Academy'
 -- output year and number of degrees granted
 -- sort by year
--- TODO issue here...in degrees, nothing is reported for 1994 so it is not in the set
 SELECT 
     D.YR
    ,E.Enrolled
@@ -120,9 +119,8 @@ ORDER BY
 -- 7
 -- find all campuses where enrollment in 2003 was higher than San Jose State
 -- report campus, 2003 enrollment number, number of faculty, student-faculty ratio
--- TODO no clue how to do this one...like what?
 SELECT
-   C2.Campus, E2.FTE
+   C2.Campus, E2.FTE, TRUNCATE(E2.FTE/F.FTE, 3) as 'student-to-faculty'
 FROM
    campuses C INNER JOIN enrollments E ON
       C.Id = E.CampusId AND E.YR = 2003 AND C.Campus = 'San Jose State University',
@@ -130,18 +128,6 @@ FROM
       C2.Id = E2.CampusId AND E2.YR = 2003,
    faculty F
 WHERE
-   -- connect F to others
    F.CampusId = C2.Id AND
    F.YR = 2003 AND
    E2.FTE > E.FTE;
---   campuses SJ,
---   enrollments E,
---   faculty F
---WHERE
-   -- connect tables
---   C.CampusId = E.CampusId AND
---   C.CampusId = F.CampusId AND
---   E.YR = F.YR
-   -- connect tables
---   C.Id = E.CampusId AND E.YR = 2004 AND
---   C.Campus = 'San Jose State University';

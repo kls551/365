@@ -32,22 +32,19 @@ WHERE
 -- find how many cars produced in 1973 had better acceleration than
 -- a 1972 volvo 145e
 SELECT
-   volvoDt.accelerate,
-   volvoNm.description,
-   CD.accelerate,
-   CN.description
+   COUNT(*)
 FROM
    carsData volvoDt INNER JOIN carNames volvoNm ON 
       volvoDt.Id = volvoNm.Id AND volvoNm.description LIKE '%volvo 145e%',
    carsData CD INNER JOIN carNames CN ON
       CD.Id = CN.Id
 WHERE
-   CD.YearMade = 1973 AND CD.accelerate < volvoDt.accelerate;
+   CD.YearMade = 1973 AND CD.accelerate > volvoDt.accelerate;
 
 -- Q4
 -- find number of car manufacturers produced a vehicle heavier than 4000 lb
 SELECT
-   *
+   COUNT(DISTINCT CN.Model)
 FROM
    carsData CD INNER JOIN carNames CN ON 
       CD.Id = CN.Id

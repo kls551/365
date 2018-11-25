@@ -88,36 +88,42 @@ WHERE
 -- report automakers whose models were on average the heaviest 
 -- report year, automaker, number of models that year, avg acceleration
 -- exclude anyone with only one car that year
-SELECT SUBQ.YearMade, MAX(SUBQ.avg)
-FROM 
-   carMakers OCM
-   , (SELECT
-   CD.YearMade
-   , CM.FullName
-   , AVG(CD.Weight) as avg
-   FROM
-   countries CTR
-   , carMakers CM
-   , modelList ML
-   , carNames CN
-   , carsData CD
-   WHERE
-   -- connect countries -> carMakers
-   CM.Country = CTR.Id AND
-   -- connect carMakers -> carNames
-   CM.Id = ML.Maker AND
-   ML.model = CN.Model AND
-   -- connect carNames -> carsData
-   CN.Id = CD.Id 
-   -- other criteria
-   GROUP BY
-   CD.YearMade
-   , CM.FullName) as SUBQ
-WHERE
-   OCM.FullName = SUBQ.FullName
+-- SELECT SUBQ.YearMade, OCM.FullName, MAX(SUBQ.avg)
+-- FROM 
+--    carMakers OCM
+--    , (SELECT
+--    CD.YearMade
+--    , CM.FullName
+--    , AVG(CD.Weight) as avg
+--    FROM
+--    countries CTR
+--    , carMakers CM
+--    , modelList ML
+--    , carNames CN
+--    , carsData CD
+--    WHERE
+--    -- connect countries -> carMakers
+--    CM.Country = CTR.Id AND
+--    -- connect carMakers -> carNames
+--    CM.Id = ML.Maker AND
+--    ML.model = CN.Model AND
+--    -- connect carNames -> carsData
+--    CN.Id = CD.Id 
+--    -- other criteria
+--    GROUP BY
+--    CD.YearMade
+--    , CM.FullName) as SUBQ
+-- WHERE
+--    OCM.FullName = SUBQ.FullName
+-- GROUP BY
+--    SUBQ.YearMade;
 
 -- Q6
 -- report diff between most efficient 8cyl and least efficient 4banger
-SELECT
+SELECT 
    (SELECT MAX(CD.MPG) FROM carsData CD WHERE CD.Cylinders = 8) -
-   (SELECT MIN(CD.MPG) FROM carsData CD WHERE CD.Cylinders = 4);
+   (SELECT MIN(CD.MPG) FROM carsData CD WHERE CD.Cylinders = 4) as SUBQ
+
+-- Q7
+-- For years b/w 1972 & 1976 find out if US automakers or others made more
+-- cars. Report either US or 'The Rest of The World'

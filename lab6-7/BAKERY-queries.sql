@@ -164,7 +164,7 @@ ORDER BY
 --   IF(CHOC.maxx > CROISS.maxx, 'Chocolate!', 'HON HON HON CROISSANT')
 -- FROM
 SELECT
-   IF(CHOC.rev > CROISS.rev, 'Chocolate!!', 'HON HON HON croissant') as winnamon
+   IF(CHOC.rev > CROISS.rev, 'Chocolate', 'Croissant') as winnamon
 FROM
 (SELECT
    G.Flavor

@@ -106,7 +106,7 @@ FROM
 -- TODO ask Prof about cutting this down to only makers with > 1 car, and how to report how many
 SELECT
    CM1.FullName
-   , CD1.YearMade
+   , CD1.YearMade as theyear
    , COUNT(DISTINCT CN1.Description)
    , TRUNCATE(AVG(CD1.Accelerate), 2)
 FROM
@@ -121,14 +121,14 @@ WHERE
     -- connect carNames -> carsData
     CN1.Id = CD1.Id
 GROUP BY
-   CD1.YearMade, CM1.FullName
+   theyear, CM1.FullName
 HAVING AVG(CD1.Weight) >= ALL(
    SELECT subsubq.avg 
    FROM 
       (SELECT ML.Maker, CD.YearMade, AVG(CD.Weight) as avg
        FROM carsData CD, carNames CN, modelList ML
        WHERE ML.model = CN.Model AND
-             CN.Id = CD.Id 
+             CN.Id = CD.Id AND CD.YearMade = theyear
        GROUP  BY ML.maker, CD.YearMade) as subsubq
    WHERE subsubq.YearMade = CD1.YearMade); 
 

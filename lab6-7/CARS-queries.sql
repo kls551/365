@@ -103,35 +103,36 @@ FROM
 -- report automakers whose models were on average the heaviest 
 -- report year, automaker, number of models that year, avg acceleration
 -- exclude anyone with only one car that year
--- TODO ask Prof about cutting this down to only makers with > 1 car, and how to report how many
-SELECT
-   CM1.FullName
-   , CD1.YearMade as theyear
-   , COUNT(DISTINCT CN1.Description)
-   , TRUNCATE(AVG(CD1.Accelerate), 2)
-FROM
-    carMakers CM1
-    , modelList ML1
-    , carNames CN1
-    , carsData CD1
-WHERE
-    -- connect carMakers -> carNames
-    CM1.Id = ML1.Maker AND
-    ML1.model = CN1.Model AND
-    -- connect carNames -> carsData
-    CN1.Id = CD1.Id
-GROUP BY
-   theyear, CM1.FullName
-HAVING AVG(CD1.Weight) >= ALL(
-   SELECT subsubq.avg 
-   FROM 
-      (SELECT ML.Maker, CD.YearMade, AVG(CD.Weight) as avg
-       FROM carsData CD, carNames CN, modelList ML
-       WHERE ML.model = CN.Model AND
-             CN.Id = CD.Id AND CD.YearMade = theyear
-       GROUP  BY ML.maker, CD.YearMade) as subsubq
-   WHERE subsubq.YearMade = CD1.YearMade); 
+select cccc.year, cr.model, cccc.weight
+from 
+(
+    select ccc.year, max(ccc.weight) as weight
+    from
+    (
+        select cc.Model, cc.year, avg(cc.Weight) as weight, count(*) as num
+        from
+        (
+            select c.*, cd.Weight as Weight, cd.yearmade as year
+            from carNames c, carMakers cm, carsData cd 
+            where cm.Maker = c.Model and c.Id=cd.Id
+        ) cc
+        group by cc.Model, cc.year
+    ) ccc
+    where ccc.num != 1
+    group by ccc.year
+) cccc, 
 
+(select cc.Model, cc.year, avg(cc.Weight) as weight, count(*) as num
+    from
+    (
+        select c.*, cd.Weight as Weight, cd.yearmade as year
+        from carNames c, carMakers cm, carsData cd 
+        where cm.Maker = c.Model and c.Id=cd.Id
+    ) cc
+    group by cc.Model, cc.year) cr
+
+where cr.weight =cccc.weight
+;
 -- Q6
 -- report diff between most efficient 8cyl and least efficient 4banger
 SELECT 

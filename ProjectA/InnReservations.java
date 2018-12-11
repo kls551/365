@@ -13,7 +13,7 @@ import java.math.*;
 // main function. Contains main program loop
 public class InnReservations {
 
-    private static Connection conn = null;
+    public static Connection conn = null;
     // enter main program loop
     public static void main(String args[]){
             String url ="", user="", pw="";
@@ -62,7 +62,7 @@ public class InnReservations {
 
     }
 
-    private static void sqlConnect(String url, String userName, String password) {
+    public static void sqlConnect(String url, String userName, String password) {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             System.out.println("Driver class found and loaded.");
@@ -113,7 +113,7 @@ public class InnReservations {
 
 
     // Main UI display
-    private static void displayMain() {
+    public static void displayMain() {
         // Clear the screen
         // clearScreen();
 
@@ -126,7 +126,7 @@ public class InnReservations {
     }
 
     // Program loop for admin subsystem
-    private static void adminLoop() {
+    public static void adminLoop() {
         boolean exit = false;
         Scanner input = new Scanner(System.in);
 
@@ -178,38 +178,49 @@ public class InnReservations {
         }
     }
 
-    // Program loop for owner subsystem
-    private static void ownerLoop() {
-        boolean exit = false;
-        Scanner input = new Scanner(System.in);
+   // Program loop for owner subsystem
+   public static void ownerLoop() {
+      boolean exit = false;
+      Scanner input = new Scanner(System.in);
 
-        while (!exit) {
-            displayOwner();
+      while (!exit) {
+         displayOwner();
 
-            String[] tokens = input.nextLine().toLowerCase().split("\\s");
-            char option = tokens[0].charAt(0);
-            char dataOpt = 0;
+         String[] tokens = input.nextLine().toLowerCase().split("\\s");
+         char option = tokens[0].charAt(0);
+         char dataOpt = 0;
 
-            if (tokens.length == 2)
-                dataOpt = tokens[1].charAt(0);
+         if (tokens.length == 2)
+            dataOpt = tokens[1].charAt(0);
 
-            switch(option) {
-                case 'o':   System.out.println("occupancyMenu\n");
-                    break;
-                case 'd':   System.out.println("revenueData\n");
-                    break;
-                case 's':   System.out.println("browseRes()\n");
-                    break;
-                case 'r':   System.out.println("viewRooms\n");
-                    break;
-                case 'b':   exit = true;
-                    break;
-            }
-        }
-    }
+         switch(option) {
+            case 'o':   
+               clearScreen();
+               Owner.occupancy(conn);
+               break;
+            case 'd':   
+               Owner.revenue(conn);
+               break;
+            case 's':   
+               System.out.print("Enter start date: ");
+               String d1 = InnReservations.getDate();
+               System.out.print("Enter end date: ");
+               String d2 = getDate();
+               Owner.browseRes(d1, d2, conn);
+               break;
+            case 'r':   
+               Owner.showRooms(conn);
+               String in1 = viewRooms();
+               Owner.rooms(in1, conn);
+                        break;
+            case 'b':   exit = true;
+                        break;
+         }
+      }
+   }
 
     // Program loop for guest subsystem
-    private static void guestLoop() {
+    public static void guestLoop() {
         boolean exit = false;
         Scanner input = new Scanner(System.in);
 
@@ -219,13 +230,16 @@ public class InnReservations {
             char option = input.next().toLowerCase().charAt(0);
 
             switch(option) {
-                case 'r':   System.out.println("roomsAndRates\n");
+                case 'r':   
                     //guest.tableDisplayRoom(conn);
-                    System.out.println(viewRooms());
+                    clearScreen();
+                    Owner.showRooms(conn);
+                    System.out.println("guestloop");
+                    guest.RoomsNRates(conn);
                     break;
                 case 's':   
-
-                    System.out.println("viewStays\n");
+                     //checkAvailability(conn, 'TAA')
+	             guest.reservationList(conn);
                     break;
                 case 't' : 
                     //guest.pricecheck(conn, "AOB", "2018-12-28", "2019-01-03");
@@ -238,7 +252,7 @@ public class InnReservations {
     }
 
     // Guest UI display
-    private static void displayGuest() {
+    public static void displayGuest() {
         // Clear the screen
         // clearScreen();
 
@@ -251,7 +265,7 @@ public class InnReservations {
     }
 
     // Clears the console screen when running interactive
-    private static void clearScreen() {
+    public static void clearScreen() {
         Console c = System.console();
         if (c != null) {
 
@@ -270,7 +284,7 @@ public class InnReservations {
     }
 
     // Admin UI display
-    private static void displayAdmin() {
+    public static void displayAdmin() {
 
         // Clear the screen -- only if it makes sense to do it
         // clearScreen();
@@ -295,7 +309,7 @@ public class InnReservations {
     //    etc.
 
     // Owner UI display
-    private static void displayOwner() {
+    public static void displayOwner() {
         // Clear the screen
         // clearScreen();
 
@@ -312,7 +326,7 @@ public class InnReservations {
 
 
     // Get a date from input
-    private static String getDate() {
+    public static String getDate() {
         Scanner input = new Scanner(System.in);
 
         String monthName = input.next();
@@ -323,7 +337,7 @@ public class InnReservations {
     }
 
     // Convert month name to month number
-    private static int monthNum(String month) {
+    public static int monthNum(String month) {
         switch (month) {
             case "january": return 1;
             case "february": return 2;
@@ -343,7 +357,7 @@ public class InnReservations {
     }
 
     // ask how many dates will be entered
-    private static int getNumDates() {
+    public static int getNumDates() {
         Scanner input = new Scanner(System.in);
 
         System.out.print("Enter number of dates (1 or 2): ");
@@ -358,7 +372,7 @@ public class InnReservations {
 
 
     // get the room code or a 'q' response to back up the menu
-    private static String getRoomCodeOrQ() {
+    public static String getRoomCodeOrQ() {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter room code for more details "
                 + "(or (q)uit to exit): ");
@@ -368,7 +382,7 @@ public class InnReservations {
 
 
     // get the reservation code or a 'q' response to back up the menu
-    private static String getReservCodeOrQ() {
+    public static String getReservCodeOrQ() {
         Scanner input = new Scanner(System.in);
         System.out.print("Enter reservation code for more details "
                 + "(or (q)uit to exit): ");
@@ -378,7 +392,7 @@ public class InnReservations {
 
 
     // Revenue and volume data subsystem -- option to continue or quit
-    private static char revenueData() {
+    public static char revenueData() {
         Scanner input = new Scanner(System.in);
         char opt;
         System.out.print("Type (c)ount, (d)ays, or (r)evenue to view "
@@ -392,7 +406,7 @@ public class InnReservations {
 
     // potentially useful for Rooms Viewing Subsystem -- gets option to
     // view room code or reservations room code or exit
-    private static String viewRooms() {
+    public static String viewRooms() {
         Scanner input = new Scanner(System.in);
         System.out.print("Type (v)iew [room code] or "
                 + "(r)eservations [room code], or (q)uit to exit: ");
@@ -405,7 +419,7 @@ public class InnReservations {
     }
 
     // ask user if they wish to quit
-    private static char askIfQuit() {
+    public static char askIfQuit() {
         Scanner input = new Scanner(System.in);
 
         System.out.print("Enter (q)uit to quit: ");
@@ -416,7 +430,7 @@ public class InnReservations {
 
 
     // ask user if they wish to go back
-    private static char askIfGoBack() {
+    public static char askIfGoBack() {
         Scanner input = new Scanner(System.in);
 
         System.out.print("Enter (b)ack to go back: ");
@@ -427,7 +441,7 @@ public class InnReservations {
 
 
     // potentially useful for check availability subsystem
-    private static char availabilityOrGoBack() {
+    public static char availabilityOrGoBack() {
         Scanner input = new Scanner(System.in);
 
         System.out.print("Enter (a)vailability, or "
@@ -439,7 +453,7 @@ public class InnReservations {
 
     // Check availability subsystem:
     // ask if they want to place reservation or renege
-    private static char reserveOrGoBack() {
+    public static char reserveOrGoBack() {
         Scanner input = new Scanner(System.in);
 
         System.out.print("Enter (r)eserve to place a reservation, "
@@ -450,7 +464,7 @@ public class InnReservations {
     }
 
     // Get the user's first name (for making a reservation)
-    private static String getFirstName() {
+    public static String getFirstName() {
         Scanner input = new Scanner(System.in);
 
         System.out.print("Enter your first name: ");
@@ -459,7 +473,7 @@ public class InnReservations {
     }
 
     // Get the user's last name (for making a reservation)
-    private static String getLastName() {
+    public static String getLastName() {
         Scanner input = new Scanner(System.in);
 
         System.out.print("Enter your last name: ");
@@ -468,7 +482,7 @@ public class InnReservations {
     }
 
     // Get the number of adults for a reservation
-    private static int getNumAdults() {
+    public static int getNumAdults() {
         Scanner input = new Scanner(System.in);
 
         System.out.print("Enter number of adults: ");
@@ -477,7 +491,7 @@ public class InnReservations {
     }
 
     // Get the number of children for a reservation
-    private static int getNumChildren() {
+    public static int getNumChildren() {
         Scanner input = new Scanner(System.in);
 
         System.out.print("Enter number of children: ");
@@ -486,7 +500,7 @@ public class InnReservations {
     }
 
     // get discount for a room reservation
-    private static String getDiscount() {
+    public static String getDiscount() {
         Scanner input = new Scanner(System.in);
 
         System.out.print("Enter discount (AAA or AARP, if applicable): ");

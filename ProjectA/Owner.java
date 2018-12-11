@@ -6,6 +6,7 @@ import java.math.*;
 
 public class Owner {
 
+   // OR-1 call from ownerLoop()
    public static void occupancy(Connection conn) {
       PreparedStatement stmt = null;
       ResultSet rset = null;
@@ -15,8 +16,8 @@ public class Owner {
       int dNum = InnReservations.getNumDates();
       if (dNum == 1)
       {
-         System.out.print("Give a date: ");
-         String date1 = InnReservations.getDate();
+      System.out.println("Enter check-in date (YYYY-MM-DD):");
+      String date1 = input.nextLine();
          try {
            String query =  
                " SELECT " +
@@ -30,19 +31,20 @@ public class Owner {
                " FROM " +
                "    reservations RE " +
                " WHERE " +
-               "    RE.checkIn <= " + date1 + " AND RE.CheckOut > " + date1 + " " +
+               "    RE.checkIn <= '" + date1 + "' AND RE.CheckOut > '" + date1 + "' " +
                " UNION " +
                " SELECT DISTINCT " +
                "    RE.Room, 'unoccupied' as occupied " +
                " FROM " +
                "    reservations RE " +
                " WHERE " +
-               "    (RE.CheckIn <= " + date1 + " AND RE.checkout <= " + date1 + ") OR " +
-               "     RE.CheckIn > " + date1 + ") as hello " +
+               "    (RE.CheckIn <= '" + date1 + "' AND RE.checkout <= '" + date1 + "') OR " +
+               "     RE.CheckIn > '" + date1 + "') as hello " +
                " GROUP BY " +
                "     hello.room) as roooms, rooms R " +
                " WHERE " +
                "    R.RoomId = roooms.Room; ";
+           System.out.println(query);
             
            
            stmt = conn.prepareStatement(query);
@@ -61,47 +63,47 @@ public class Owner {
            }
       }
       else {
-         System.out.print("Give a date: ");
-         String date1 = InnReservations.getDate();
-         System.out.print("Give another date: ");
-         String date2 = InnReservations.getDate();
+      System.out.println("Enter check-in date (YYYY-MM-DD):");
+      String date1 = input.nextLine();
+      System.out.println("Enter check-out date (YYYY-MM-DD):");
+      String date2 = input.nextLine();
          try {
            String query =  
-" SELECT Christmas.room as rm, sum(Christmas.yoooo) as dys, diff.df as df" +
-" FROM " +
-"          (SELECT " +
-"             RE.room, " +
-"             if(RE.checkout between " + date1 + " and " + date2 + ", RE.checkout, " + date2 + ") as yo, " +
-"             if(RE.checkin between " + date1 + " and " + date2 + ",  " +
-"                if(RE.checkin = " + date2 + ", DATE_ADD(RE.Checkin, INTERVAL -1 DAY), RE.checkin), " + date1 + ") as yoo,  " +
-"             datediff( " +
-"             if(RE.checkout between " + date1 + " and " + date2 + ", RE.checkout, " + date2 + "), " +
-"             if(RE.checkin between " + date1 + " and " + date2 + ", if(RE.checkin = " + date2 + ", DATE_ADD(RE.Checkin, INTERVAL -1 DAY), RE.checkin), " + date1 + ")) as yoooo,  " +
-"             RE.checkout, " +
-"             RE.checkin FROM reservations RE WHERE  ((RE.checkIn between " + date1 + " and " + date2 + ") " +
-"                   or (RE.checkOut between " + date1 + " and " + date2 + "))) as Christmas, " +
-"             (SELECT DATEDIFF(" + date2 + ", " + date1 + ") as df) as diff " +
-"    GROUP BY Christmas.room, diff.df";
+" SELECT Room,  " +
+"          CASE " +
+"             WHEN (CheckIn <= '" + date1 + "' AND CheckOut >='" + date2 + "') " +
+"                THEN 'FULLY OCCUPIED' " +
+"             WHEN (CheckIn <= '" + date1 + "' AND CheckOut BETWEEN '" + date1 + "' AND '" + date2 + "') " +
+"                THEN 'PARTIALLY OCCUPIED' " +
+"             WHEN (CheckIn BETWEEN '" + date1 + "' AND '" + date2 + "' AND CheckOut > '" + date2 + "') " +
+"                THEN 'PARTIALLY OCCUPIED' " +
+"             END AS AVAILABILITY  " +
+" FROM reservations " +
+" WHERE (CheckIn <= '" + date1 + "' AND CheckOut >= '" + date2 + "') " +
+"       OR " +
+"       (CheckIn <= '" + date1 + "' AND CheckOut BETWEEN '" + date1 + "' AND '1" + date2 + "') " +
+"       OR " +
+"       (CheckIn BETWEEN '" + date1 + "' AND '" + date2 + "' AND CheckOut > '" + date2 + "') " +
+" UNION " +
+"    SELECT DISTINCT R.RoomId, 'FULLY VACANT' as status From rooms R WHERE R.RoomId NOT IN (SELECT Room FROM reservations " +
+" WHERE (CheckIn <= '" + date1 + "' AND CheckOut >= '" + date2 + "') " +
+"       OR " +
+"       (CheckIn <= '" + date1 + "' AND CheckOut BETWEEN '" + date1 + "' AND '" + date2 + "') " +
+"       OR " +
+"       (CheckIn BETWEEN '" + date1 + "' AND '" + date2 + "' AND CheckOut > '" + date2 + "') " +
+" ) ";
+           System.out.println(query);
             
            
            stmt = conn.prepareStatement(query);
            rset = stmt.executeQuery();
            
            System.out.println();
+           InnReservations.clearScreen();
            System.out.println("Status by room");
            while (rset.next()) {
-            int rdys = Integer.parseInt(rset.getString("dys"));
-            int diff = Integer.parseInt(rset.getString("df"));
-            System.out.print (rset.getString("rm"));
-            // TODO still an issue here
-            if(rdys >= diff) {
-               System.out.println(" | " + "fully occupied");
-            } else if (rdys < diff && rdys != 0) {
-               System.out.println(" | " + "partially occupied");
-            } else {
-               System.out.println(" | fully vacant");
-            }
-            System.out.println();
+              System.out.print(rset.getString("Room"));
+              System.out.println(" | " + rset.getString("AVAILABILITY"));
          }
       char aq = InnReservations.availabilityOrGoBack();
       if (aq == 'a') {
@@ -498,7 +500,7 @@ public class Owner {
    }
 
    // returns boolean: true if vacant, false if occupied/partially occupied
-   public static void checkAvailability(Connection conn, String room) {
+   public static boolean checkAvailability(Connection conn, String room) {
       Scanner input = new Scanner(System.in);
       boolean result = true;
       PreparedStatement stmt = null;
@@ -506,14 +508,13 @@ public class Owner {
       PreparedStatement stmt2 = null;
       ResultSet rset2 = null;
 
-      InnReservations.clearScreen();
-      System.out.print("Give a date: ");
-      String date1 = InnReservations.getDate();
-      System.out.print("Give another date: ");
-      String date2 = InnReservations.getDate();
+      System.out.println("Enter check-in date (YYYY-MM-DD):");
+      String date1 = input.nextLine();
+      System.out.println("Enter check-out date (YYYY-MM-DD):");
+      String date2 = input.nextLine();
 
       try {
-         String query = "SELECT DATEDIFF(" + date2 + ", " + date1 + ") as diff";
+         String query = "SELECT DATEDIFF('" + date2 + "', '" + date1 + "') as diff";
          stmt = conn.prepareStatement(query);
          int x = 0;
          rset = stmt.executeQuery();
@@ -524,9 +525,9 @@ public class Owner {
          for (int i = 0; i <= x; i++) {
             // will have rset.next() if TAA is occupied during this day
             query = 
-            "SELECT RE.*, DATE_ADD(RE.CheckOut, INTERVAL -1 DAY) as justcheckin, (DATE_ADD(" + date1 + ", INTERVAL " + x + " DAY)) as checkDate " +
+            "SELECT RE.*, DATE_ADD(RE.CheckOut, INTERVAL -1 DAY) as justcheckin, (DATE_ADD('" + date1 + "', INTERVAL " + x + " DAY)) as checkDate " +
             "FROM reservations RE WHERE RE.Room = '" + room + "' AND " +
-            "(SELECT (DATE_ADD(" + date1 + ", INTERVAL " + i + " DAY))) BETWEEN RE.CheckIn AND DATE_ADD(RE.CheckOut, INTERVAL -1 DAY)";
+            "(SELECT (DATE_ADD('" + date1 + "', INTERVAL " + i + " DAY))) BETWEEN RE.CheckIn AND DATE_ADD(RE.CheckOut, INTERVAL -1 DAY)";
             stmt = conn.prepareStatement(query);
             rset = stmt.executeQuery();
 

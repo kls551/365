@@ -1,2 +1,7 @@
 Kaitlin Bleich kbleich
 Kyaw Soe ksoe
+
+compile : javac *.java
+run     : java InnReservations
+
+forgot to add toLowerCase() in adminloop so admin options are only working with lowercase letter.
